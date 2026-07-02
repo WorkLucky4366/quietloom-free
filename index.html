@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quietloom — Free Trial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-deep:#0d0d0e;
+  --surface:#17171a;
+  --surface-2:#1f1f23;
+  --border:#2a2a2e;
+  --border-strong:#3a3a3f;
+  --text-primary:#ece9e2;
+  --text-secondary:#9a968c;
+  --text-muted:#6b6862;
+  --accent:#c9a24b;
+  --accent-dim:#7a622c;
+  --accent-bg:rgba(201,162,75,0.12);
+  --danger:#c0554a;
+  --locked:#9e4a42;
+  --locked-bg:rgba(158,74,66,0.16);
+  --radius:10px;
+  --font-display:'Cormorant Garamond', Georgia, serif;
+  --font-sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:'JetBrains Mono', ui-monospace, monospace;
+}
+[data-theme="light"]{
+  --bg-deep:#f5f3ee;
+  --surface:#ffffff;
+  --surface-2:#f0eee7;
+  --border:#e0ddd3;
+  --border-strong:#cac6ba;
+  --text-primary:#211f1a;
+  --text-secondary:#635f56;
+  --text-muted:#8a8579;
+  --accent:#a3803a;
+  --accent-dim:#c9a24b;
+  --accent-bg:rgba(163,128,58,0.10);
+  --danger:#a8433a;
+  --locked:#8a3f37;
+  --locked-bg:rgba(138,63,55,0.12);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{
+  background:var(--bg-deep);
+  color:var(--text-primary);
+  font-family:var(--font-sans);
+  font-size:14px;
+  line-height:1.6;
+  min-height:100vh;
+}
+.app{display:flex; min-height:100vh;}
+
+/* ---- sidebar (desktop) ---- */
+.sidebar{
+  width:220px;
+  flex-shrink:0;
+  border-right:0.5px solid var(--border);
+  padding:28px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.wordmark{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:26px;
+  letter-spacing:0.02em;
+  color:var(--text-primary);
+  margin-bottom:4px;
+  padding:0 8px;
+}
+.wordmark small{
+  display:block;
+  font-family:var(--font-sans);
+  font-size:11px;
+  font-weight:400;
+  color:var(--text-muted);
+  letter-spacing:0.06em;
+  margin-top:2px;
+}
+.nav-item{
+  display:block;
+  width:100%;
+  text-align:left;
+  background:none;
+  border:none;
+  color:var(--text-secondary);
+  font-size:14px;
+  font-family:var(--font-sans);
+  padding:9px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:background 0.12s, color 0.12s;
+}
+.nav-item:hover{background:var(--surface); color:var(--text-primary);}
+.nav-item.active{background:var(--surface-2); color:var(--text-primary); font-weight:500;}
+.sidebar-footer{
+  margin-top:auto;
+  font-size:11px;
+  color:var(--text-muted);
+  padding:0 8px;
+}
+
+/* ---- mobile bottom nav ---- */
+.bottom-nav{display:none;}
+
+/* ---- content ---- */
+.content{flex:1; min-width:0; padding:28px 32px 100px;}
+.page{display:none;}
+.page.active{display:block;}
+
+.page-header{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:6px;
+}
+.page-title{
+  font-family:var(--font-display);
+  font-size:28px;
+  font-weight:600;
+}
+.page-sub{
+  color:var(--text-muted);
+  font-size:13px;
+  margin-bottom:22px;
+}
+
+.control-row{display:flex; gap:8px; flex-wrap:wrap;}
+button.ctrl{
+  background:var(--surface);
+  border:0.5px solid var(--border-strong);
+  color:var(--text-primary);
+  font-family:var(--font-sans);
+  font-size:13px;
+  padding:9px 16px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:border-color 0.12s, background 0.12s;
+}
+button.ctrl:hover{border-color:var(--accent); }
+button.ctrl.primary{background:var(--accent-bg); border-color:var(--accent); color:var(--accent);}
+
+/* ---- slot grid ---- */
+.slot-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+  gap:12px;
+  margin-top:22px;
+}
+.slot-card{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px;
+  min-height:104px;
+  cursor:pointer;
+  position:relative;
+  transition:border-color 0.12s;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.slot-card:hover{border-color:var(--border-strong);}
+.slot-card.open{border-color:var(--accent);}
+.slot-card.locked{border-color:var(--locked); background:var(--locked-bg);}
+.slot-head{display:flex; align-items:flex-start; justify-content:space-between; gap:6px;}
+.slot-cat{font-size:12px; color:var(--text-muted); text-transform:capitalize;}
+.rare-badge{
+  width:20px; height:20px; border-radius:50%;
+  border:0.5px solid var(--border-strong);
+  color:var(--text-muted);
+  font-size:10px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.rare-badge.active{border-color:var(--accent); color:var(--accent); background:var(--accent-bg);}
+.slot-value{
+  font-family:var(--font-display);
+  font-size:18px;
+  font-weight:600;
+  margin-top:10px;
+  color:var(--text-primary);
+  word-break:break-word;
+}
+.slot-value.empty{color:var(--text-muted); font-family:var(--font-sans); font-weight:400; font-size:14px;}
+.slot-lock{
+  align-self:flex-end;
+  background:none; border:none; cursor:pointer;
+  font-size:18px; margin-top:8px;
+  color:var(--text-muted);
+}
+.slot-lock.on{color:var(--locked);}
+
+.slot-add{
+  border:1px dashed var(--border-strong);
+  background:none;
+  border-radius:var(--radius);
+  min-height:104px;
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column;
+  gap:4px;
+  color:var(--text-muted);
+  cursor:pointer;
+  font-size:13px;
+}
+.slot-add:hover{color:var(--accent); border-color:var(--accent);}
+.slot-add .plus{font-size:22px; font-family:var(--font-display);}
+
+/* ---- detail drawer ---- */
+.drawer{
+  display:none;
+  margin-top:24px;
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:12px;
+  padding:22px;
+}
+.drawer.open{display:block;}
+.drawer-head{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:4px;
+}
+.drawer-title{font-family:var(--font-display); font-size:20px; font-weight:600;}
+.drawer-close{background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:18px;}
+.drawer-note{color:var(--text-muted); font-size:13px; margin-bottom:16px;}
+.chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+.chip{
+  background:var(--surface-2);
+  border:0.5px solid var(--border-strong);
+  color:var(--text-secondary);
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:13px;
+  cursor:pointer;
+}
+.chip.selected{background:var(--accent-bg); border-color:var(--accent); color:var(--accent); font-weight:500;}
+.chip .r{opacity:0.6; margin-left:4px;}
+
+/* ---- prompt output ---- */
+.prompt-box{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  margin-top:18px;
+}
+.prompt-label{font-size:12px; color:var(--text-muted); margin-bottom:10px;}
+.prompt-text{
+  font-family:var(--font-mono);
+  font-size:14px;
+  color:var(--text-primary);
+  line-height:1.8;
+  min-height:24px;
+  word-break:break-word;
+}
+.prompt-actions{display:flex; gap:8px; margin-top:16px;}
+
+/* ---- generic forms ---- */
+.field-row{margin-bottom:16px;}
+.field-label{display:block; font-size:12px; color:var(--text-secondary); margin-bottom:6px;}
+input[type=text], input[type=file], textarea{
+  width:100%;
+  background:var(--surface-2);
+  border:0.5px solid var(--border-strong);
+  border-radius:8px;
+  padding:9px 12px;
+  color:var(--text-primary);
+  font-family:var(--font-sans);
+  font-size:13px;
+}
+textarea{resize:vertical; min-height:60px;}
+input[type=range]{width:100%;}
+
+.stub{
+  border:1px dashed var(--border-strong);
+  border-radius:12px;
+  padding:40px 24px;
+  text-align:center;
+  color:var(--text-muted);
+  margin-top:20px;
+}
+.stub b{color:var(--text-secondary); display:block; margin-bottom:6px; font-family:var(--font-display); font-size:17px;}
+
+table.plain{width:100%; border-collapse:collapse; margin-top:16px; font-size:13px;}
+table.plain th, table.plain td{
+  text-align:left; padding:10px 8px; border-bottom:0.5px solid var(--border);
+  color:var(--text-secondary);
+}
+table.plain th{color:var(--text-muted); font-weight:500; font-size:12px;}
+.row-del{background:none; border:none; color:var(--danger); cursor:pointer; font-size:12px;}
+
+.preset-list, .history-list{margin-top:16px; display:flex; flex-direction:column; gap:8px;}
+.preset-item, .history-item{
+  background:var(--surface); border:0.5px solid var(--border); border-radius:8px;
+  padding:12px 14px; display:flex; justify-content:space-between; align-items:center; gap:10px;
+}
+.preset-item .name{font-weight:500;}
+.history-item .txt{font-family:var(--font-mono); font-size:12px; color:var(--text-secondary); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.mini-btn{
+  background:none; border:0.5px solid var(--border-strong); color:var(--text-secondary);
+  border-radius:6px; padding:5px 10px; font-size:12px; cursor:pointer; flex-shrink:0;
+}
+.mini-btn:hover{border-color:var(--accent); color:var(--accent);}
+
+.toast{
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+  background:var(--text-primary); color:var(--bg-deep);
+  padding:10px 20px; border-radius:999px; font-size:13px;
+  opacity:0; pointer-events:none; transition:opacity 0.2s;
+  z-index:100;
+}
+.toast.show{opacity:1;}
+
+@media (max-width: 860px){
+  .sidebar{display:none;}
+  .content{padding:20px 16px 90px;}
+  .bottom-nav{
+    display:flex; overflow-x:auto;
+    position:fixed; bottom:0; left:0; right:0;
+    background:var(--surface); border-top:0.5px solid var(--border);
+    z-index:50;
+  }
+  .bottom-nav button{
+    flex:1; min-width:76px; background:none; border:none;
+    color:var(--text-muted); font-size:11px; padding:12px 6px;
+    font-family:var(--font-sans); cursor:pointer;
+  }
+  .bottom-nav button.active{color:var(--accent);}
+  .slot-grid{grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="wordmark">Quietloom<small data-i18n="free_badge">無料お試し版</small></div>
+    <button class="nav-item active" data-page="modules" data-i18n="nav_modules">モジュール</button>
+    <button class="nav-item" data-page="character" data-i18n="nav_character">キャラクター</button>
+    <button class="nav-item" data-page="reference" data-i18n="nav_reference">リファレンス</button>
+    <button class="nav-item" data-page="negative" data-i18n="nav_negative">ネガティブ</button>
+    <button class="nav-item" data-page="prompt" data-i18n="nav_prompt">プロンプト</button>
+    <button class="nav-item" data-page="history" data-i18n="nav_history">履歴</button>
+    <button class="nav-item" data-page="io" data-i18n="nav_io">入出力</button>
+    <button class="nav-item" data-page="settings" data-i18n="nav_settings">設定</button>
+    <div class="sidebar-footer" data-i18n-html="sidebar_footer">スロットの仕組みのみ。<br>内容はCSVパックから読み込みます。</div>
+    <div class="sidebar-footer" style="margin-top:6px;" data-i18n-html="free_upgrade_note">これは4パックのみの無料お試し版です。<br><a href="https://witchdenev.gumroad.com/l/rauiju" id="full-version-link" target="_blank" rel="noopener" style="color:var(--accent);">フル版(全10パック)はこちら</a></div>
+  </aside>
+
+  <main class="content">
+
+    <!-- MODULES -->
+    <section class="page active" id="page-modules">
+      <div class="page-header">
+        <div class="page-title" data-i18n="page_modules_title">モジュール</div>
+        <div class="control-row">
+          <button class="ctrl" id="btn-all-none" data-i18n="btn_all_none">すべてNone</button>
+          <button class="ctrl" id="btn-all-lock" data-i18n="btn_all_lock">すべてロック</button>
+          <button class="ctrl" id="btn-preset" data-page-jump="prompt" data-i18n="btn_preset">プリセット</button>
+          <button class="ctrl primary" id="btn-shuffle" data-i18n="btn_shuffle">シャッフル</button>
+        </div>
+      </div>
+      <div class="page-sub" data-i18n="page_modules_sub">スロットの仕組みのみ。内容は登録されたコンテンツパックから読み込まれます。</div>
+
+      <div class="slot-grid" id="slot-grid">
+        <!-- cards injected by JS -->
+        <button class="slot-add" id="btn-add-slot">
+          <span class="plus">+</span>
+          <span data-i18n="btn_add_slot">追加</span>
+        </button>
+      </div>
+
+      <div class="drawer" id="drawer">
+        <div class="drawer-head">
+          <div class="drawer-title" id="drawer-title">—</div>
+          <button class="drawer-close" id="drawer-close">✕</button>
+        </div>
+        <div class="drawer-note" id="drawer-note"></div>
+        <div class="chip-row" id="drawer-chips"></div>
+      </div>
+
+      <div class="prompt-box">
+        <div class="prompt-label" data-i18n="prompt_preview_label">プロンプトプレビュー</div>
+        <div class="prompt-text" id="preview-text" data-empty="true">パックを読み込むとここに表示されます</div>
+      </div>
+    </section>
+
+    <!-- CHARACTER -->
+    <section class="page" id="page-character">
+      <div class="page-header"><div class="page-title" data-i18n="page_character_title">キャラクター</div></div>
+      <div class="page-sub" data-i18n="page_character_sub">キャラクター固有の情報を保持するモジュールです。</div>
+
+      <div class="field-row">
+        <label class="field-label" data-i18n="char_name_label">名前</label>
+        <input type="text" id="char-name-input" data-i18n-placeholder="char_name_placeholder">
+      </div>
+      <div class="field-row">
+        <label class="field-label" data-i18n="char_desc_label">説明(プロンプトに合流する文章)</label>
+        <textarea id="char-desc-input" rows="3" data-i18n-placeholder="char_desc_placeholder"></textarea>
+      </div>
+      <div class="field-row">
+        <label class="field-label" data-i18n="char_tags_label">タグ(カンマ区切り・任意)</label>
+        <input type="text" id="char-tags-input" data-i18n-placeholder="char_tags_placeholder">
+      </div>
+      <div class="actions" style="display:flex; gap:8px;">
+        <button class="ctrl primary" id="btn-char-save" data-i18n="btn_char_save">追加</button>
+        <button class="ctrl" id="btn-char-cancel" style="display:none;" data-i18n="btn_char_cancel">キャンセル</button>
+      </div>
+
+      <div class="preset-list" id="char-list"></div>
+    </section>
+
+    <!-- REFERENCE -->
+    <section class="page" id="page-reference">
+      <div class="page-header"><div class="page-title" data-i18n="page_reference_title">リファレンス</div></div>
+      <div class="page-sub" data-i18n="page_reference_sub">参照画像やスタイル資料を紐づけるモジュールです。</div>
+
+      <div class="field-row">
+        <label class="field-label" data-i18n="ref_title_label">タイトル</label>
+        <input type="text" id="ref-title-input" data-i18n-placeholder="ref_title_placeholder">
+      </div>
+      <div class="field-row">
+        <label class="field-label" data-i18n="ref_note_label">メモ(プロンプトに合流する文章)</label>
+        <textarea id="ref-note-input" rows="3" data-i18n-placeholder="ref_note_placeholder"></textarea>
+      </div>
+      <div class="actions" style="display:flex; gap:8px;">
+        <button class="ctrl primary" id="btn-ref-save" data-i18n="btn_ref_save">追加</button>
+        <button class="ctrl" id="btn-ref-cancel" style="display:none;" data-i18n="btn_ref_cancel">キャンセル</button>
+      </div>
+
+      <div class="preset-list" id="ref-list"></div>
+    </section>
+
+    <!-- NEGATIVE (stub) -->
+    <section class="page" id="page-negative">
+      <div class="page-header"><div class="page-title" data-i18n="page_negative_title">ネガティブ</div></div>
+      <div class="page-sub" data-i18n="page_negative_sub">除外したい要素を管理するモジュールです。</div>
+      <div class="stub" data-i18n-html="stub_negative"><b>まだ何もありません</b>ネガティブ用のパックを読み込むと、ここに専用スロットが表示されます。</div>
+    </section>
+
+    <!-- PROMPT -->
+    <section class="page" id="page-prompt">
+      <div class="page-header"><div class="page-title" data-i18n="page_prompt_title">プロンプト</div></div>
+      <div class="page-sub" data-i18n="page_prompt_sub">現在の選択から生成される最終プロンプトです。</div>
+
+      <div class="prompt-box">
+        <div class="prompt-label" data-i18n="output_label">出力</div>
+        <div class="prompt-text" id="full-prompt-text" data-empty="true">パックを読み込むとここに表示されます</div>
+        <div class="prompt-actions">
+          <button class="ctrl primary" id="btn-copy-prompt" data-i18n="btn_copy_prompt">コピー</button>
+          <button class="ctrl" id="btn-save-history" data-i18n="btn_save_history">履歴に保存</button>
+        </div>
+      </div>
+
+      <div class="page-title" style="font-size:20px; margin-top:32px;" data-i18n="preset_title">プリセット</div>
+      <div class="page-sub" data-i18n="preset_sub">現在の選択とロック状態を名前付きで保存します。</div>
+      <div class="field-row" style="max-width:360px; display:flex; gap:8px;">
+        <input type="text" id="preset-name" placeholder="プリセット名" data-i18n-placeholder="preset_name_placeholder">
+        <button class="ctrl primary" id="btn-preset-save" data-i18n="btn_preset_save">保存</button>
+      </div>
+      <div class="preset-list" id="preset-list"></div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="page" id="page-history">
+      <div class="page-header"><div class="page-title" data-i18n="page_history_title">履歴</div></div>
+      <div class="page-sub" data-i18n="page_history_sub">「プロンプト」ページで保存した過去の出力です。</div>
+      <div class="history-list" id="history-list"></div>
+    </section>
+
+    <!-- IO -->
+    <section class="page" id="page-io">
+      <div class="page-header"><div class="page-title" data-i18n="page_io_title">入出力</div></div>
+      <div class="page-sub" data-i18n="page_io_sub">CSVパックの読み込みと、現在のデータの書き出しを行います。</div>
+
+      <div class="field-row" style="max-width:420px;">
+        <label class="field-label" data-i18n="csv_load_label">CSVパックを読み込む(複数選択可)</label>
+        <input type="file" id="csv-input" accept=".csv" multiple>
+      </div>
+
+      <table class="plain" id="pack-table">
+        <thead><tr><th data-i18n="th_pack">読み込み済みパック</th><th data-i18n="th_cat">カテゴリ</th><th data-i18n="th_count">件数</th><th></th></tr></thead>
+        <tbody id="pack-table-body"></tbody>
+      </table>
+
+      <div class="control-row" style="margin-top:24px;">
+        <button class="ctrl" id="btn-export-prompt" data-i18n="btn_export_prompt">プロンプトをテキストで書き出す</button>
+        <button class="ctrl" id="btn-export-state" data-i18n="btn_export_state">現在の状態をJSONで書き出す</button>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="page" id="page-settings">
+      <div class="page-header"><div class="page-title" data-i18n="page_settings_title">設定</div></div>
+
+      <div class="field-row" style="max-width:360px; margin-top:20px;">
+        <label class="field-label" data-i18n="theme_label">表示テーマ</label>
+        <div class="control-row">
+          <button class="ctrl" id="theme-dark" data-i18n="theme_dark">ダーク</button>
+          <button class="ctrl" id="theme-light" data-i18n="theme_light">ライト</button>
+        </div>
+      </div>
+
+      <div class="field-row" style="max-width:360px; margin-top:20px;">
+        <label class="field-label" data-i18n="lang_label">表示言語</label>
+        <div class="control-row">
+          <button class="ctrl" id="lang-ja" data-i18n="lang_ja">日本語</button>
+          <button class="ctrl" id="lang-en" data-i18n="lang_en">English</button>
+        </div>
+      </div>
+
+      <div class="field-row" style="max-width:360px;">
+        <label class="field-label"><span data-i18n="rare_weight_label">レア項目の出現しやすさ</span>(<span id="rare-weight-val">0.2</span>)</label>
+        <input type="range" id="rare-weight" min="0.05" max="1" step="0.05" value="0.2">
+      </div>
+
+      <div class="field-row" style="max-width:360px; margin-top:24px;">
+        <button class="ctrl" id="btn-reset-all" style="border-color:var(--danger); color:var(--danger);" data-i18n="btn_reset_all">すべてのデータをリセット</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<nav class="bottom-nav">
+  <button class="active" data-page="modules" data-i18n="bnav_modules">モジュール</button>
+  <button data-page="character" data-i18n="bnav_character">キャラ</button>
+  <button data-page="reference" data-i18n="bnav_reference">参照</button>
+  <button data-page="negative" data-i18n="bnav_negative">除外</button>
+  <button data-page="prompt" data-i18n="bnav_prompt">出力</button>
+  <button data-page="history" data-i18n="bnav_history">履歴</button>
+  <button data-page="io" data-i18n="bnav_io">入出力</button>
+  <button data-page="settings" data-i18n="bnav_settings">設定</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- storage keys ---------- */
+  const K_ROWS = 'ql_rows';
+  const K_PACKS = 'ql_packs';
+  const K_SEL = 'ql_selection';
+  const K_LOCK = 'ql_locked';
+  const K_HISTORY = 'ql_history';
+  const K_PRESETS = 'ql_presets';
+  const K_SETTINGS = 'ql_settings';
+  const K_CHARACTERS = 'ql_characters';
+  const K_ACTIVE_CHAR = 'ql_active_character';
+  const K_REFERENCES = 'ql_references';
+  const K_ACTIVE_REFS = 'ql_active_references';
+
+  const store = {
+    get(k, fallback){
+      try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : fallback; }
+      catch(e){ return fallback; }
+    },
+    set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+  };
+
+  let state = {
+    rows: store.get(K_ROWS, []),           // all loaded CSV rows, flat
+    packs: store.get(K_PACKS, []),         // [{filename, count, cats:[...]}]
+    selection: store.get(K_SEL, {}),       // {cat: id|null}
+    locked: store.get(K_LOCK, {}),         // {cat: bool}
+    history: store.get(K_HISTORY, []),     // [{ts, text}]
+    presets: store.get(K_PRESETS, []),     // [{name, selection, locked}]
+    settings: store.get(K_SETTINGS, {theme:'dark', rareWeight:0.2, lang:'ja'}),
+    characters: store.get(K_CHARACTERS, []),           // [{id, name, description, tags}]
+    activeCharacterId: store.get(K_ACTIVE_CHAR, null),
+    references: store.get(K_REFERENCES, []),           // [{id, title, note}]
+    activeReferenceIds: store.get(K_ACTIVE_REFS, [])
+  };
+
+  function persist(){
+    store.set(K_ROWS, state.rows);
+    store.set(K_PACKS, state.packs);
+    store.set(K_SEL, state.selection);
+    store.set(K_LOCK, state.locked);
+    store.set(K_HISTORY, state.history);
+    store.set(K_PRESETS, state.presets);
+    store.set(K_SETTINGS, state.settings);
+    store.set(K_CHARACTERS, state.characters);
+    store.set(K_ACTIVE_CHAR, state.activeCharacterId);
+    store.set(K_REFERENCES, state.references);
+    store.set(K_ACTIVE_REFS, state.activeReferenceIds);
+  }
+
+  /* ---------- i18n ---------- */
+  const I18N = {
+    ja: {
+      nav_modules:'モジュール', nav_character:'キャラクター', nav_reference:'リファレンス',
+      nav_negative:'ネガティブ', nav_prompt:'プロンプト', nav_history:'履歴',
+      nav_io:'入出力', nav_settings:'設定',
+      bnav_modules:'モジュール', bnav_character:'キャラ', bnav_reference:'参照',
+      bnav_negative:'除外', bnav_prompt:'出力', bnav_history:'履歴',
+      bnav_io:'入出力', bnav_settings:'設定',
+      sidebar_footer:'スロットの仕組みのみ。<br>内容はCSVパックから読み込みます。',
+      free_badge:'無料お試し版',
+      free_upgrade_note:'これは4パックのみの無料お試し版です。<br><a href="https://witchdenev.gumroad.com/l/rauiju" id="full-version-link" target="_blank" rel="noopener" style="color:var(--accent);">フル版(全10パック)はこちら</a>',
+      page_modules_title:'モジュール', btn_all_none:'すべてNone', btn_all_lock:'すべてロック',
+      btn_preset:'プリセット', btn_shuffle:'シャッフル',
+      page_modules_sub:'スロットの仕組みのみ。内容は登録されたコンテンツパックから読み込まれます。',
+      btn_add_slot:'追加',
+      prompt_preview_label:'プロンプトプレビュー',
+      pack_placeholder:'パックを読み込むとここに表示されます',
+      page_character_title:'キャラクター', page_character_sub:'キャラクター固有の情報を保持するモジュールです。',
+      stub_character:'<b>まだ何もありません</b>関連パック(例: appearance_detail.csv)を読み込むと、ここにキャラクター固定用のスロットが表示されます。',
+      page_reference_title:'リファレンス', page_reference_sub:'参照画像やスタイル資料を紐づけるモジュールです。',
+      stub_reference:'<b>まだ何もありません</b>今後の拡張で、構図・スタイル参照との連携をここに追加できます。',
+      page_negative_title:'ネガティブ', page_negative_sub:'除外したい要素を管理するモジュールです。',
+      stub_negative:'<b>まだ何もありません</b>ネガティブ用のパックを読み込むと、ここに専用スロットが表示されます。',
+      page_prompt_title:'プロンプト', page_prompt_sub:'現在の選択から生成される最終プロンプトです。',
+      output_label:'出力', btn_copy_prompt:'コピー', btn_save_history:'履歴に保存',
+      preset_title:'プリセット', preset_sub:'現在の選択とロック状態を名前付きで保存します。',
+      preset_name_placeholder:'プリセット名', btn_preset_save:'保存',
+      page_history_title:'履歴', page_history_sub:'「プロンプト」ページで保存した過去の出力です。',
+      history_empty:'<b>まだ履歴がありません</b>プロンプトページで保存すると、ここに一覧表示されます。',
+      page_io_title:'入出力', page_io_sub:'CSVパックの読み込みと、現在のデータの書き出しを行います。',
+      csv_load_label:'CSVパックを読み込む(複数選択可)',
+      th_pack:'読み込み済みパック', th_cat:'カテゴリ', th_count:'件数',
+      btn_export_prompt:'プロンプトをテキストで書き出す', btn_export_state:'現在の状態をJSONで書き出す',
+      pack_table_empty:'まだパックが読み込まれていません',
+      page_settings_title:'設定', theme_label:'表示テーマ', theme_dark:'ダーク', theme_light:'ライト',
+      lang_label:'表示言語', lang_ja:'日本語', lang_en:'English',
+      rare_weight_label:'レア項目の出現しやすさ',
+      btn_reset_all:'すべてのデータをリセット',
+      label_none:'なし',
+      lock_title:'ロック',
+      char_name_label:'名前', char_name_placeholder:'例: 灰狼の少女',
+      char_desc_label:'説明(プロンプトに合流する文章)', char_desc_placeholder:'例: silver-haired girl with a scar across her cheek, wearing a tattered cloak',
+      char_tags_label:'タグ(カンマ区切り・任意)', char_tags_placeholder:'例: 主人公, ガーディアン',
+      btn_char_save:'追加', btn_char_cancel:'キャンセル', btn_char_update:'更新',
+      char_none_yet:'<b>キャラクターはまだ登録されていません</b>名前と説明を入力して追加すると、選択中の間ずっとプロンプトに合流します。',
+      char_in_use:'使用中', char_edit:'編集', char_delete:'削除', char_use:'使用',
+      toast_char_added:(name)=>`「${name}」を追加しました`,
+      toast_char_updated:(name)=>`「${name}」を更新しました`,
+      toast_char_deleted:(name)=>`「${name}」を削除しました`,
+      toast_char_using:(name)=>`「${name}」を使用中にしました`,
+      toast_char_stopped:(name)=>`「${name}」の使用を解除しました`,
+      toast_char_name_required:'名前と説明を入力してください',
+      ref_title_label:'タイトル', ref_title_placeholder:'例: 好みの構図メモ',
+      ref_note_label:'メモ(プロンプトに合流する文章)', ref_note_placeholder:'例: dramatic side lighting, low angle shot',
+      btn_ref_save:'追加', btn_ref_cancel:'キャンセル', btn_ref_update:'更新',
+      ref_none_yet:'<b>リファレンスはまだ登録されていません</b>タイトルとメモを入力して追加すると、使用中に切り替えたものがプロンプトに合流します。',
+      ref_in_use:'使用中', ref_edit:'編集', ref_delete:'削除', ref_use:'使用',
+      toast_ref_added:(name)=>`「${name}」を追加しました`,
+      toast_ref_updated:(name)=>`「${name}」を更新しました`,
+      toast_ref_deleted:(name)=>`「${name}」を削除しました`,
+      toast_ref_using:(name)=>`「${name}」を使用中にしました`,
+      toast_ref_stopped:(name)=>`「${name}」の使用を解除しました`,
+      toast_ref_title_required:'タイトルとメモを入力してください',
+      drawer_choose:(cat)=>`${cat}を選択してください。`,
+      row_del:'削除', mini_copy:'コピー', mini_del:'削除', mini_load:'適用',
+      preset_list_empty:'<b>プリセットはまだありません</b>上の欄に名前を入れて保存すると、選択状態とロック状態を丸ごと呼び出せます。',
+      toast_prompt_empty:'プロンプトが空です', toast_copied:'プロンプトをコピーしました',
+      toast_copy_failed:'コピーに失敗しました', toast_all_none:'すべてのスロットをなしにしました',
+      toast_all_locked:'すべてロックしました', toast_all_unlocked:'すべて解除しました',
+      toast_shuffled:'シャッフルしました', toast_copied_short:'コピーしました',
+      toast_pose_excluded:'姿勢と矛盾するためPose/Actionを「なし」にしました',
+      toast_pack_loaded:'パックを読み込みました', toast_preset_name_required:'プリセット名を入力してください',
+      toast_preset_saved:'プリセットを保存しました',
+      toast_preset_applied:(name)=>`「${name}」を適用しました`,
+      toast_history_saved:'履歴に保存しました',
+      toast_exported:'書き出しました',
+      confirm_reset_all:'すべてのパック・選択・履歴・プリセットを削除します。よろしいですか?'
+    },
+    en: {
+      nav_modules:'Modules', nav_character:'Character', nav_reference:'Reference',
+      nav_negative:'Negative', nav_prompt:'Prompt', nav_history:'History',
+      nav_io:'Import / Export', nav_settings:'Settings',
+      bnav_modules:'Modules', bnav_character:'Char', bnav_reference:'Ref',
+      bnav_negative:'Neg', bnav_prompt:'Output', bnav_history:'History',
+      bnav_io:'I/O', bnav_settings:'Settings',
+      sidebar_footer:'Slot mechanics only.<br>Content is loaded from CSV packs.',
+      free_badge:'Free Trial',
+      free_upgrade_note:'This is a free trial with 4 packs only.<br><a href="https://witchdenev.gumroad.com/l/rauiju" id="full-version-link" target="_blank" rel="noopener" style="color:var(--accent);">Get the full version (10 packs)</a>',
+      page_modules_title:'Modules', btn_all_none:'All None', btn_all_lock:'Lock All',
+      btn_preset:'Presets', btn_shuffle:'Shuffle',
+      page_modules_sub:'Slot mechanics only. Content is loaded from registered content packs.',
+      btn_add_slot:'Add',
+      prompt_preview_label:'Prompt Preview',
+      pack_placeholder:'This will appear once a pack is loaded',
+      page_character_title:'Character', page_character_sub:'A module for holding character-specific information.',
+      stub_character:'<b>Nothing here yet</b>Load a related pack (e.g. appearance_detail.csv) to see character-lock slots here.',
+      page_reference_title:'Reference', page_reference_sub:'A module for linking reference images and style material.',
+      stub_reference:'<b>Nothing here yet</b>Future expansions can add composition/style reference linking here.',
+      page_negative_title:'Negative', page_negative_sub:'A module for managing elements to exclude.',
+      stub_negative:'<b>Nothing here yet</b>Load a negative-prompt pack to see dedicated slots here.',
+      page_prompt_title:'Prompt', page_prompt_sub:'The final prompt generated from your current selections.',
+      output_label:'Output', btn_copy_prompt:'Copy', btn_save_history:'Save to History',
+      preset_title:'Presets', preset_sub:'Save your current selection and lock state under a name.',
+      preset_name_placeholder:'Preset name', btn_preset_save:'Save',
+      page_history_title:'History', page_history_sub:'Past outputs saved from the Prompt page.',
+      history_empty:'<b>No history yet</b>Save from the Prompt page to see entries listed here.',
+      page_io_title:'Import / Export', page_io_sub:'Load CSV packs and export your current data.',
+      csv_load_label:'Load CSV packs (multiple allowed)',
+      th_pack:'Loaded Pack', th_cat:'Category', th_count:'Count',
+      btn_export_prompt:'Export prompt as text', btn_export_state:'Export current state as JSON',
+      pack_table_empty:'No packs loaded yet',
+      page_settings_title:'Settings', theme_label:'Display Theme', theme_dark:'Dark', theme_light:'Light',
+      lang_label:'Display Language', lang_ja:'日本語', lang_en:'English',
+      rare_weight_label:'Rare item frequency',
+      btn_reset_all:'Reset All Data',
+      label_none:'None',
+      lock_title:'Lock',
+      char_name_label:'Name', char_name_placeholder:'e.g. Ashwolf Girl',
+      char_desc_label:'Description (merged into the prompt)', char_desc_placeholder:'e.g. silver-haired girl with a scar across her cheek, wearing a tattered cloak',
+      char_tags_label:'Tags (comma-separated, optional)', char_tags_placeholder:'e.g. protagonist, guardian',
+      btn_char_save:'Add', btn_char_cancel:'Cancel', btn_char_update:'Update',
+      char_none_yet:'<b>No characters yet</b>Enter a name and description to add one — it stays merged into the prompt while active.',
+      char_in_use:'In use', char_edit:'Edit', char_delete:'Delete', char_use:'Use',
+      toast_char_added:(name)=>`Added "${name}"`,
+      toast_char_updated:(name)=>`Updated "${name}"`,
+      toast_char_deleted:(name)=>`Deleted "${name}"`,
+      toast_char_using:(name)=>`Now using "${name}"`,
+      toast_char_stopped:(name)=>`Stopped using "${name}"`,
+      toast_char_name_required:'Please enter a name and description',
+      ref_title_label:'Title', ref_title_placeholder:'e.g. Favorite composition note',
+      ref_note_label:'Note (merged into the prompt)', ref_note_placeholder:'e.g. dramatic side lighting, low angle shot',
+      btn_ref_save:'Add', btn_ref_cancel:'Cancel', btn_ref_update:'Update',
+      ref_none_yet:'<b>No references yet</b>Enter a title and note to add one — toggle it active to merge it into the prompt.',
+      ref_in_use:'Active', ref_edit:'Edit', ref_delete:'Delete', ref_use:'Use',
+      toast_ref_added:(name)=>`Added "${name}"`,
+      toast_ref_updated:(name)=>`Updated "${name}"`,
+      toast_ref_deleted:(name)=>`Deleted "${name}"`,
+      toast_ref_using:(name)=>`Activated "${name}"`,
+      toast_ref_stopped:(name)=>`Deactivated "${name}"`,
+      toast_ref_title_required:'Please enter a title and note',
+      drawer_choose:(cat)=>`Choose ${cat}.`,
+      row_del:'Delete', mini_copy:'Copy', mini_del:'Delete', mini_load:'Load',
+      preset_list_empty:'<b>No presets yet</b>Enter a name above and save to recall the full selection and lock state later.',
+      toast_prompt_empty:'Prompt is empty', toast_copied:'Prompt copied',
+      toast_copy_failed:'Copy failed', toast_all_none:'All slots set to none',
+      toast_all_locked:'Locked all', toast_all_unlocked:'Unlocked all',
+      toast_shuffled:'Shuffled', toast_copied_short:'Copied',
+      toast_pose_excluded:'Pose/Action set to none (conflicts with current posture)',
+      toast_pack_loaded:'Pack loaded', toast_preset_name_required:'Please enter a preset name',
+      toast_preset_saved:'Preset saved',
+      toast_preset_applied:(name)=>`Applied "${name}"`,
+      toast_history_saved:'Saved to history',
+      toast_exported:'Exported',
+      confirm_reset_all:'This will delete all packs, selections, history, and presets. Continue?'
+    }
+  };
+  function t(key){
+    const dict = I18N[state.settings.lang] || I18N.ja;
+    const v = dict[key];
+    return typeof v === 'function' ? v : (v !== undefined ? v : key);
+  }
+  function displayName(item){
+    if(!item) return '';
+    if(state.settings.lang === 'en') return item.name || item.name_ja || '';
+    return item.name_ja || item.name || '';
+  }
+  function applyI18n(){
+    document.documentElement.setAttribute('lang', state.settings.lang);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      el.textContent = t(key);
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      el.innerHTML = t(key);
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      el.placeholder = t(key);
+    });
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+      const key = el.getAttribute('data-i18n-title');
+      el.title = t(key);
+    });
+    ['preview-text', 'full-prompt-text'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el && el.dataset.empty === 'true') el.textContent = t('pack_placeholder');
+    });
+  }
+
+
+  function parseCSV(text){
+    const rows = [];
+    let i = 0, field = '', row = [], inQuotes = false;
+    const pushField = () => { row.push(field); field = ''; };
+    const pushRow = () => { rows.push(row); row = []; };
+    while(i < text.length){
+      const c = text[i];
+      if(inQuotes){
+        if(c === '"'){
+          if(text[i+1] === '"'){ field += '"'; i += 2; continue; }
+          inQuotes = false; i++; continue;
+        }
+        field += c; i++; continue;
+      } else {
+        if(c === '"'){ inQuotes = true; i++; continue; }
+        if(c === ','){ pushField(); i++; continue; }
+        if(c === '\r'){ i++; continue; }
+        if(c === '\n'){ pushField(); pushRow(); i++; continue; }
+        field += c; i++; continue;
+      }
+    }
+    if(field.length || row.length){ pushField(); pushRow(); }
+    if(!rows.length) return [];
+    const header = rows.shift().map(h => h.trim());
+    return rows
+      .filter(r => r.length > 1 || (r[0] && r[0].trim()))
+      .map(r => {
+        const obj = {};
+        header.forEach((h, idx) => obj[h] = (r[idx] ?? '').trim());
+        return obj;
+      });
+  }
+
+  /* ---------- derived data ---------- */
+  function getCats(){
+    const seen = [];
+    state.rows.forEach(r => { if(r.cat && !seen.includes(r.cat)) seen.push(r.cat); });
+    return seen;
+  }
+  function getCatItems(cat){
+    return state.rows.filter(r => r.cat === cat);
+  }
+  function getItemById(id){
+    return state.rows.find(r => r.id === id);
+  }
+  function isRare(item){
+    return !!(item && item.rare && item.rare.trim());
+  }
+  function excludesPoseAction(item){
+    return !!(item && item.exclude_pose_action && item.exclude_pose_action.trim().toLowerCase() === 'true');
+  }
+  // posture_baseの選択がPose/Actionとの組み合わせを除外する属性を持つ場合、
+  // pose_action(ロックされていなければ)を強制的に「なし」にする。戻り値: 実際に変更したか
+  function applyPoseExclusion(){
+    const postureId = state.selection['posture_base'];
+    const postureItem = postureId ? getItemById(postureId) : null;
+    if(!excludesPoseAction(postureItem)) return false;
+    if(!getCats().includes('pose_action')) return false;
+    if(state.locked['pose_action']) return false;
+    if(state.selection['pose_action'] == null) return false;
+    state.selection['pose_action'] = null;
+    return true;
+  }
+
+  function weightedPick(items){
+    const rw = state.settings.rareWeight;
+    const weights = items.map(it => isRare(it) ? rw : 1);
+    const total = weights.reduce((a,b)=>a+b, 0);
+    let r = Math.random() * total;
+    for(let idx = 0; idx < items.length; idx++){
+      r -= weights[idx];
+      if(r <= 0) return items[idx];
+    }
+    return items[items.length - 1];
+  }
+
+  /* ---------- prompt building ---------- */
+  function buildPrompt(){
+    const cats = getCats();
+    const parts = [];
+    cats.forEach(cat => {
+      const id = state.selection[cat];
+      if(!id) return;
+      const item = getItemById(id);
+      if(item && item.term && item.term.trim()){
+        parts.push(item.term.trim());
+      }
+    });
+    const activeChar = state.activeCharacterId
+      ? state.characters.find(c => c.id === state.activeCharacterId)
+      : null;
+    if(activeChar && activeChar.description && activeChar.description.trim()){
+      parts.push(activeChar.description.trim());
+    }
+    (state.activeReferenceIds || []).forEach(rid => {
+      const ref = state.references.find(r => r.id === rid);
+      if(ref && ref.note && ref.note.trim()) parts.push(ref.note.trim());
+    });
+    return parts.join(', ');
+  }
+
+  /* ---------- rendering: modules page ---------- */
+  const slotGrid = document.getElementById('slot-grid');
+  const addBtn = document.getElementById('btn-add-slot');
+
+  function renderGrid(){
+    document.querySelectorAll('.slot-card').forEach(el => el.remove());
+    const cats = getCats();
+    cats.forEach(cat => {
+      const card = document.createElement('div');
+      card.className = 'slot-card';
+      card.dataset.cat = cat;
+      const locked = !!state.locked[cat];
+      if(locked) card.classList.add('locked');
+      const selId = state.selection[cat];
+      const selItem = selId ? getItemById(selId) : null;
+      const rareOn = isRare(selItem);
+
+      card.innerHTML = `
+        <div class="slot-head">
+          <span class="slot-cat">${escapeHtml(cat)}</span>
+          <span class="rare-badge ${rareOn ? 'active' : ''}">R</span>
+        </div>
+        <div class="slot-value ${selItem ? '' : 'empty'}">${selItem ? escapeHtml(displayName(selItem)) : t('label_none')}</div>
+        <button class="slot-lock ${locked ? 'on' : ''}" title="${t('lock_title')}">${locked ? '🔒' : '🔓'}</button>
+      `;
+      card.querySelector('.slot-lock').addEventListener('click', (e) => {
+        e.stopPropagation();
+        state.locked[cat] = !state.locked[cat];
+        persist(); renderGrid();
+      });
+      card.addEventListener('click', () => openDrawer(cat));
+      slotGrid.insertBefore(card, addBtn);
+    });
+    renderPreview();
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  /* ---------- drawer ---------- */
+  const drawer = document.getElementById('drawer');
+  const drawerTitle = document.getElementById('drawer-title');
+  const drawerNote = document.getElementById('drawer-note');
+  const drawerChips = document.getElementById('drawer-chips');
+  let currentDrawerCat = null;
+
+  function openDrawer(cat){
+    currentDrawerCat = cat;
+    document.querySelectorAll('.slot-card').forEach(c => c.classList.toggle('open', c.dataset.cat === cat));
+    drawerTitle.textContent = cat;
+    drawerNote.textContent = t('drawer_choose')(cat);
+    const items = getCatItems(cat);
+    const selId = state.selection[cat];
+    drawerChips.innerHTML = '';
+
+    const noneChip = document.createElement('button');
+    noneChip.className = 'chip' + (!selId ? ' selected' : '');
+    noneChip.textContent = `— ${t('label_none')} —`;
+    noneChip.addEventListener('click', () => { state.selection[cat] = null; persist(); renderGrid(); openDrawer(cat); });
+    drawerChips.appendChild(noneChip);
+
+    items.forEach(it => {
+      const chip = document.createElement('button');
+      chip.className = 'chip' + (selId === it.id ? ' selected' : '');
+      chip.innerHTML = escapeHtml(displayName(it)) + (isRare(it) ? '<span class="r">R</span>' : '');
+      chip.addEventListener('click', () => {
+        state.selection[cat] = it.id;
+        const excluded = cat === 'posture_base' ? applyPoseExclusion() : false;
+        persist(); renderGrid(); openDrawer(cat);
+        if(excluded) toast(t('toast_pose_excluded'));
+      });
+      drawerChips.appendChild(chip);
+    });
+
+    drawer.classList.add('open');
+  }
+  document.getElementById('drawer-close').addEventListener('click', () => {
+    drawer.classList.remove('open');
+    document.querySelectorAll('.slot-card').forEach(c => c.classList.remove('open'));
+  });
+
+  /* ---------- right-click copy (PC only) ---------- */
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+  if(!isTouchDevice){
+    document.getElementById('page-modules').addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      const p = buildPrompt();
+      if(!p){ toast(t('toast_prompt_empty')); return; }
+      navigator.clipboard.writeText(p).then(() => toast(t('toast_copied')))
+        .catch(() => toast(t('toast_copy_failed')));
+    });
+  }
+
+  /* ---------- global controls ---------- */
+  document.getElementById('btn-all-none').addEventListener('click', () => {
+    getCats().forEach(cat => { state.selection[cat] = null; });
+    persist(); renderGrid();
+    toast(t('toast_all_none'));
+  });
+
+  document.getElementById('btn-all-lock').addEventListener('click', () => {
+    const cats = getCats();
+    const anyUnlocked = cats.some(c => !state.locked[c]);
+    cats.forEach(c => { state.locked[c] = anyUnlocked; });
+    persist(); renderGrid();
+    toast(anyUnlocked ? t('toast_all_locked') : t('toast_all_unlocked'));
+  });
+
+  document.getElementById('btn-shuffle').addEventListener('click', () => {
+    getCats().forEach(cat => {
+      if(state.locked[cat]) return;
+      const items = getCatItems(cat);
+      if(!items.length) return;
+      const picked = weightedPick(items);
+      state.selection[cat] = picked.id;
+    });
+    const excluded = applyPoseExclusion();
+    persist(); renderGrid();
+    toast(excluded ? t('toast_pose_excluded') : t('toast_shuffled'));
+  });
+
+  document.getElementById('btn-preset').addEventListener('click', () => switchPage('prompt'));
+  addBtn.addEventListener('click', () => switchPage('io'));
+
+  /* ---------- preview / prompt page ---------- */
+  const previewText = document.getElementById('preview-text');
+  const fullPromptText = document.getElementById('full-prompt-text');
+
+  function renderPreview(){
+    const p = buildPrompt();
+    const display = p || t('pack_placeholder');
+    previewText.textContent = display;
+    previewText.dataset.empty = p ? 'false' : 'true';
+    fullPromptText.textContent = display;
+    fullPromptText.dataset.empty = p ? 'false' : 'true';
+  }
+
+  document.getElementById('btn-copy-prompt').addEventListener('click', async () => {
+    const p = buildPrompt();
+    if(!p){ toast(t('toast_prompt_empty')); return; }
+    try{ await navigator.clipboard.writeText(p); toast(t('toast_copied')); }
+    catch(e){ toast(t('toast_copy_failed')); }
+  });
+
+  document.getElementById('btn-save-history').addEventListener('click', () => {
+    const p = buildPrompt();
+    if(!p){ toast(t('toast_prompt_empty')); return; }
+    state.history.unshift({ ts: Date.now(), text: p });
+    state.history = state.history.slice(0, 200);
+    persist(); renderHistory();
+    toast(t('toast_history_saved'));
+  });
+
+  /* ---------- history page ---------- */
+  const historyList = document.getElementById('history-list');
+  function renderHistory(){
+    historyList.innerHTML = '';
+    if(!state.history.length){
+      historyList.innerHTML = `<div class="stub">${t('history_empty')}</div>`;
+      return;
+    }
+    state.history.forEach((h, idx) => {
+      const el = document.createElement('div');
+      el.className = 'history-item';
+      const d = new Date(h.ts);
+      el.innerHTML = `
+        <div class="txt" title="${escapeHtml(h.text)}">${escapeHtml(h.text)}</div>
+        <button class="mini-btn" data-act="copy">${t('mini_copy')}</button>
+        <button class="mini-btn" data-act="del">${t('mini_del')}</button>
+      `;
+      el.querySelector('[data-act=copy]').addEventListener('click', async () => {
+        try{ await navigator.clipboard.writeText(h.text); toast(t('toast_copied_short')); } catch(e){}
+      });
+      el.querySelector('[data-act=del]').addEventListener('click', () => {
+        state.history.splice(idx, 1); persist(); renderHistory();
+      });
+      historyList.appendChild(el);
+    });
+  }
+
+  /* ---------- characters ---------- */
+  const charList = document.getElementById('char-list');
+  const charNameInput = document.getElementById('char-name-input');
+  const charDescInput = document.getElementById('char-desc-input');
+  const charTagsInput = document.getElementById('char-tags-input');
+  const charSaveBtn = document.getElementById('btn-char-save');
+  const charCancelBtn = document.getElementById('btn-char-cancel');
+  let editingCharId = null;
+
+  function renderCharacters(){
+    charList.innerHTML = '';
+    if(!state.characters.length){
+      charList.innerHTML = `<div class="stub">${t('char_none_yet')}</div>`;
+      return;
+    }
+    state.characters.forEach(c => {
+      const active = c.id === state.activeCharacterId;
+      const el = document.createElement('div');
+      el.className = 'preset-item';
+      const tagsText = (c.tags || []).length ? escapeHtml(c.tags.join(', ')) : '';
+      el.innerHTML = `
+        <span class="name">${escapeHtml(c.name)}${active ? ' — ' + t('char_in_use') : ''}${tagsText ? ' <small style="color:var(--text-muted);">(' + tagsText + ')</small>' : ''}</span>
+        <span>
+          <button class="mini-btn" data-act="toggle">${active ? t('char_in_use') : t('char_use')}</button>
+          <button class="mini-btn" data-act="edit">${t('char_edit')}</button>
+          <button class="mini-btn" data-act="del">${t('char_delete')}</button>
+        </span>
+      `;
+      el.querySelector('[data-act=toggle]').addEventListener('click', () => {
+        state.activeCharacterId = active ? null : c.id;
+        persist(); renderCharacters(); renderPreview();
+        toast(active ? t('toast_char_stopped')(c.name) : t('toast_char_using')(c.name));
+      });
+      el.querySelector('[data-act=edit]').addEventListener('click', () => {
+        editingCharId = c.id;
+        charNameInput.value = c.name;
+        charDescInput.value = c.description;
+        charTagsInput.value = (c.tags || []).join(', ');
+        charSaveBtn.textContent = t('btn_char_update');
+        charCancelBtn.style.display = '';
+        charNameInput.focus();
+      });
+      el.querySelector('[data-act=del]').addEventListener('click', () => {
+        state.characters = state.characters.filter(x => x.id !== c.id);
+        if(state.activeCharacterId === c.id) state.activeCharacterId = null;
+        if(editingCharId === c.id) resetCharForm();
+        persist(); renderCharacters(); renderPreview();
+        toast(t('toast_char_deleted')(c.name));
+      });
+      charList.appendChild(el);
+    });
+  }
+  function resetCharForm(){
+    editingCharId = null;
+    charNameInput.value = ''; charDescInput.value = ''; charTagsInput.value = '';
+    charSaveBtn.textContent = t('btn_char_save');
+    charCancelBtn.style.display = 'none';
+  }
+  charSaveBtn.addEventListener('click', () => {
+    const name = charNameInput.value.trim();
+    const description = charDescInput.value.trim();
+    const tags = charTagsInput.value.split(',').map(s => s.trim()).filter(Boolean);
+    if(!name || !description){ toast(t('toast_char_name_required')); return; }
+    if(editingCharId){
+      const c = state.characters.find(x => x.id === editingCharId);
+      c.name = name; c.description = description; c.tags = tags;
+      persist(); renderCharacters(); renderPreview();
+      toast(t('toast_char_updated')(name));
+    } else {
+      state.characters.push({ id: 'char_' + Date.now(), name, description, tags });
+      persist(); renderCharacters();
+      toast(t('toast_char_added')(name));
+    }
+    resetCharForm();
+  });
+  charCancelBtn.addEventListener('click', resetCharForm);
+
+  /* ---------- references ---------- */
+  const refList = document.getElementById('ref-list');
+  const refTitleInput = document.getElementById('ref-title-input');
+  const refNoteInput = document.getElementById('ref-note-input');
+  const refSaveBtn = document.getElementById('btn-ref-save');
+  const refCancelBtn = document.getElementById('btn-ref-cancel');
+  let editingRefId = null;
+
+  function renderReferences(){
+    refList.innerHTML = '';
+    if(!state.references.length){
+      refList.innerHTML = `<div class="stub">${t('ref_none_yet')}</div>`;
+      return;
+    }
+    state.references.forEach(r => {
+      const active = (state.activeReferenceIds || []).includes(r.id);
+      const el = document.createElement('div');
+      el.className = 'preset-item';
+      el.innerHTML = `
+        <span class="name">${escapeHtml(r.title)}${active ? ' — ' + t('ref_in_use') : ''}</span>
+        <span>
+          <button class="mini-btn" data-act="toggle">${active ? t('ref_in_use') : t('ref_use')}</button>
+          <button class="mini-btn" data-act="edit">${t('ref_edit')}</button>
+          <button class="mini-btn" data-act="del">${t('ref_delete')}</button>
+        </span>
+      `;
+      el.querySelector('[data-act=toggle]').addEventListener('click', () => {
+        state.activeReferenceIds = state.activeReferenceIds || [];
+        if(active){
+          state.activeReferenceIds = state.activeReferenceIds.filter(id => id !== r.id);
+        } else {
+          state.activeReferenceIds.push(r.id);
+        }
+        persist(); renderReferences(); renderPreview();
+        toast(active ? t('toast_ref_stopped')(r.title) : t('toast_ref_using')(r.title));
+      });
+      el.querySelector('[data-act=edit]').addEventListener('click', () => {
+        editingRefId = r.id;
+        refTitleInput.value = r.title;
+        refNoteInput.value = r.note;
+        refSaveBtn.textContent = t('btn_ref_update');
+        refCancelBtn.style.display = '';
+        refTitleInput.focus();
+      });
+      el.querySelector('[data-act=del]').addEventListener('click', () => {
+        state.references = state.references.filter(x => x.id !== r.id);
+        state.activeReferenceIds = (state.activeReferenceIds || []).filter(id => id !== r.id);
+        if(editingRefId === r.id) resetRefForm();
+        persist(); renderReferences(); renderPreview();
+        toast(t('toast_ref_deleted')(r.title));
+      });
+      refList.appendChild(el);
+    });
+  }
+  function resetRefForm(){
+    editingRefId = null;
+    refTitleInput.value = ''; refNoteInput.value = '';
+    refSaveBtn.textContent = t('btn_ref_save');
+    refCancelBtn.style.display = 'none';
+  }
+  refSaveBtn.addEventListener('click', () => {
+    const title = refTitleInput.value.trim();
+    const note = refNoteInput.value.trim();
+    if(!title || !note){ toast(t('toast_ref_title_required')); return; }
+    if(editingRefId){
+      const r = state.references.find(x => x.id === editingRefId);
+      r.title = title; r.note = note;
+      persist(); renderReferences(); renderPreview();
+      toast(t('toast_ref_updated')(title));
+    } else {
+      state.references.push({ id: 'ref_' + Date.now(), title, note });
+      persist(); renderReferences();
+      toast(t('toast_ref_added')(title));
+    }
+    resetRefForm();
+  });
+  refCancelBtn.addEventListener('click', resetRefForm);
+
+  /* ---------- presets ---------- */
+  const presetList = document.getElementById('preset-list');
+  function renderPresets(){
+    presetList.innerHTML = '';
+    if(!state.presets.length){
+      presetList.innerHTML = `<div class="stub">${t('preset_list_empty')}</div>`;
+      return;
+    }
+    state.presets.forEach((p, idx) => {
+      const el = document.createElement('div');
+      el.className = 'preset-item';
+      el.innerHTML = `
+        <span class="name">${escapeHtml(p.name)}</span>
+        <span>
+          <button class="mini-btn" data-act="load">${t('mini_load')}</button>
+          <button class="mini-btn" data-act="del">${t('mini_del')}</button>
+        </span>
+      `;
+      el.querySelector('[data-act=load]').addEventListener('click', () => {
+        state.selection = JSON.parse(JSON.stringify(p.selection));
+        state.locked = JSON.parse(JSON.stringify(p.locked));
+        persist(); renderGrid();
+        toast(t('toast_preset_applied')(p.name));
+      });
+      el.querySelector('[data-act=del]').addEventListener('click', () => {
+        state.presets.splice(idx, 1); persist(); renderPresets();
+      });
+      presetList.appendChild(el);
+    });
+  }
+  document.getElementById('btn-preset-save').addEventListener('click', () => {
+    const nameInput = document.getElementById('preset-name');
+    const name = nameInput.value.trim();
+    if(!name){ toast(t('toast_preset_name_required')); return; }
+    state.presets.unshift({
+      name,
+      selection: JSON.parse(JSON.stringify(state.selection)),
+      locked: JSON.parse(JSON.stringify(state.locked))
+    });
+    nameInput.value = '';
+    persist(); renderPresets();
+    toast(t('toast_preset_saved'));
+  });
+
+  /* ---------- import / export ---------- */
+  const csvInput = document.getElementById('csv-input');
+  const packTableBody = document.getElementById('pack-table-body');
+
+  csvInput.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files || []);
+    for(const file of files){
+      const text = await file.text();
+      const parsed = parseCSV(text);
+      if(!parsed.length) continue;
+      state.rows = state.rows.concat(parsed);
+      const cats = Array.from(new Set(parsed.map(r => r.cat).filter(Boolean)));
+      state.packs.push({ filename: file.name, count: parsed.length, cats });
+    }
+    persist(); renderGrid(); renderPackTable();
+    csvInput.value = '';
+    toast(t('toast_pack_loaded'));
+  });
+
+  function renderPackTable(){
+    packTableBody.innerHTML = '';
+    if(!state.packs.length){
+      packTableBody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted);">${t('pack_table_empty')}</td></tr>`;
+      return;
+    }
+    state.packs.forEach((p, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(p.filename)}</td>
+        <td>${escapeHtml(p.cats.join(', '))}</td>
+        <td>${p.count}</td>
+        <td><button class="row-del" data-idx="${idx}">${t('row_del')}</button></td>
+      `;
+      tr.querySelector('.row-del').addEventListener('click', () => {
+        const removedCats = p.cats;
+        state.rows = state.rows.filter(r => !(removedCats.includes(r.cat) && state.packs[idx].cats.includes(r.cat) && matchesPack(r, p)));
+        state.packs.splice(idx, 1);
+        persist(); renderGrid(); renderPackTable();
+      });
+      packTableBody.appendChild(tr);
+    });
+  }
+  // simple heuristic: since rows don't store filename, full removal by cat when only one pack owns that cat
+  function matchesPack(row, pack){
+    return pack.cats.includes(row.cat);
+  }
+
+  document.getElementById('btn-export-prompt').addEventListener('click', () => {
+    const p = buildPrompt();
+    downloadText('quietloom-prompt.txt', p || '');
+    toast(t('toast_exported'));
+  });
+  document.getElementById('btn-export-state').addEventListener('click', () => {
+    downloadText('quietloom-state.json', JSON.stringify(state, null, 2));
+    toast(t('toast_exported'));
+  });
+  function downloadText(filename, text){
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /* ---------- settings ---------- */
+  function applyTheme(){
+    document.documentElement.setAttribute('data-theme', state.settings.theme);
+  }
+  document.getElementById('theme-dark').addEventListener('click', () => { state.settings.theme = 'dark'; persist(); applyTheme(); });
+  document.getElementById('theme-light').addEventListener('click', () => { state.settings.theme = 'light'; persist(); applyTheme(); });
+
+  function applyLangButtons(){
+    document.getElementById('lang-ja').classList.toggle('primary', state.settings.lang === 'ja');
+    document.getElementById('lang-en').classList.toggle('primary', state.settings.lang === 'en');
+  }
+  function switchLang(lang){
+    state.settings.lang = lang;
+    persist();
+    applyI18n();
+    applyLangButtons();
+    renderGrid();
+    renderPackTable();
+    renderPresets();
+    renderHistory();
+    renderCharacters();
+    renderReferences();
+    if(drawer.classList.contains('open') && currentDrawerCat) openDrawer(currentDrawerCat);
+  }
+  document.getElementById('lang-ja').addEventListener('click', () => switchLang('ja'));
+  document.getElementById('lang-en').addEventListener('click', () => switchLang('en'));
+
+  const rareSlider = document.getElementById('rare-weight');
+  const rareVal = document.getElementById('rare-weight-val');
+  rareSlider.value = state.settings.rareWeight;
+  rareVal.textContent = state.settings.rareWeight;
+  rareSlider.addEventListener('input', () => {
+    state.settings.rareWeight = parseFloat(rareSlider.value);
+    rareVal.textContent = state.settings.rareWeight.toFixed(2);
+    persist();
+  });
+
+  document.getElementById('btn-reset-all').addEventListener('click', () => {
+    if(!confirm(t('confirm_reset_all'))) return;
+    localStorage.removeItem(K_ROWS); localStorage.removeItem(K_PACKS);
+    localStorage.removeItem(K_SEL); localStorage.removeItem(K_LOCK);
+    localStorage.removeItem(K_HISTORY); localStorage.removeItem(K_PRESETS);
+    localStorage.removeItem(K_CHARACTERS); localStorage.removeItem(K_ACTIVE_CHAR);
+    localStorage.removeItem(K_REFERENCES); localStorage.removeItem(K_ACTIVE_REFS);
+    location.reload();
+  });
+
+  /* ---------- page switching ---------- */
+  function switchPage(page){
+    document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + page));
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+    document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+    if(page === 'history') renderHistory();
+    if(page === 'prompt') { renderPreview(); renderPresets(); }
+    if(page === 'io') renderPackTable();
+    if(page === 'character') renderCharacters();
+    if(page === 'reference') renderReferences();
+  }
+  document.querySelectorAll('.nav-item, .bottom-nav button').forEach(btn => {
+    if(btn.dataset.page) btn.addEventListener('click', () => switchPage(btn.dataset.page));
+  });
+
+  /* ---------- toast ---------- */
+  let toastTimer = null;
+  function toast(msg){
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
+  }
+
+  /* ---------- free trial: 同梱パックの自動読み込み ---------- */
+  const FREE_BUNDLED_PACKS = [{"filename": "subject_primary_secondary_free.csv", "text": "id,cat,name,name_ja,term,effect,tags,rare\nsubj_p_1,subject_primary,Young Woman,若い女性,young woman,,Subject,\nsubj_p_2,subject_primary,Adult Man,成人男性,adult man,,Subject,\nsubj_p_5,subject_primary,Robed Stranger,ローブをまとった見知らぬ者,robed stranger,,Subject,\nsubj_s_1,subject_secondary,None,なし,,,Subject,\nsubj_s_2,subject_secondary,Gray Wolf,灰色の狼,gray wolf,,Subject,\nsubj_s_3,subject_secondary,Raven,カラス,raven,,Subject,\n"}, {"filename": "outfit_free.csv", "text": "id,cat,name,name_ja,term,effect,tags,rare\noutfit_1,outfit,Princely Attire,装飾的な貴族衣装,ornate princely attire with a flowing cape,,Outfit,\noutfit_4,outfit,Kimono,着物,traditional kimono with flowing sleeves,,Outfit,\noutfit_7,outfit,Mage Robe,魔法使いのローブ,flowing mage robe with embroidered runes,,Outfit,\noutfit_12,outfit,Scout Gear,軽装の斥候装備,light leather scout gear,,Outfit,\n"}, {"filename": "expression_free.csv", "text": "id,cat,name,name_ja,term,effect,tags,rare,intensity\nexpr_2,expression,Joy,喜び,\"warm, genuine smile\",,Expression,,中\nexpr_8,expression,Anger,怒り,\"angry glare, brows furrowed\",,Expression,,中\nexpr_14,expression,Sadness,悲しみ,\"downcast, sorrowful expression\",,Expression,,中\nexpr_17,expression,Surprise,驚き,\"startled expression, eyes wide\",,Expression,,中\nexpr_23,expression,Trust,信頼,\"open, trusting expression\",,Expression,,中\n"}, {"filename": "pose_action_free.csv", "text": "id,cat,name,name_ja,term,effect,tags,rare,mood\npose_1,pose_action,Crossed Arms,腕を組む,\"arms crossed, confident stance\",,Pose,,自信・威厳・防御的\npose_6,pose_action,Arms Wide Open,両腕を広げる,\"arms wide open, embracing gesture\",,Pose,,開放感・歓喜\npose_13,pose_action,Hand on Hip,手を腰に当てる,hand resting on hip,,Pose,,余裕・挑発的な立ち姿\npose_18,pose_action,Running,走る,\"running motion, caught mid-stride\",,Pose,,逃走・緊迫感・躍動\n"}];
+  (function loadBundledFreePacks(){
+    const alreadyLoadedNames = new Set(state.packs.map(p => p.filename));
+    let changed = false;
+    FREE_BUNDLED_PACKS.forEach(pack => {
+      if(alreadyLoadedNames.has(pack.filename)) return; // 再訪問時の重複読み込みを防ぐ
+      const parsed = parseCSV(pack.text);
+      if(!parsed.length) return;
+      state.rows = state.rows.concat(parsed);
+      const cats = Array.from(new Set(parsed.map(r => r.cat).filter(Boolean)));
+      state.packs.push({ filename: pack.filename, count: parsed.length, cats });
+      changed = true;
+    });
+    if(changed) persist();
+  })();
+
+  /* ---------- init ---------- */
+  applyTheme();
+  applyI18n();
+  applyLangButtons();
+  renderGrid();
+  renderPackTable();
+  renderHistory();
+  renderPresets();
+  renderCharacters();
+  renderReferences();
+})();
+</script>
+</body>
+</html>
