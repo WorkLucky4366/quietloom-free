@@ -960,8 +960,8 @@ table.plain th{color:var(--text-muted); font-weight:500; font-size:12px;}
       const id = state.selection[cat];
       if(!id) return;
       const item = getItemById(id);
-      if(item && item.term && item.term.trim()){
-        parts.push(item.term.trim());
+      if(item && item.prompt_en && item.prompt_en.trim()){
+        parts.push(item.prompt_en.trim());
       }
     });
     const activeChar = state.activeCharacterId
